@@ -19,6 +19,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
     private final UserServiceImpl userServiceImpl;
 
     public UserController(UserServiceImpl userServiceImpl) {

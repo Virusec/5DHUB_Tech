@@ -12,7 +12,14 @@ public class UserDto {
     public UserDto() {
     }
 
-    public UserDto(String firstName, String lastName, String phoneNumber) {
+//    public UserDto(String firstName, String lastName, String phoneNumber) {
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.phoneNumber = phoneNumber;
+//    }
+
+    public UserDto(Long id, String firstName, String lastName, String phoneNumber) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;

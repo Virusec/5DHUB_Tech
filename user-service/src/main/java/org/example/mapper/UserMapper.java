@@ -11,20 +11,16 @@ import java.util.stream.Collectors;
  */
 public class UserMapper {
     public static User toEntity(UserDto userDto) {
-        User user = new User();
-        user.setFirstName(userDto.getFirstName());
-        user.setLastName(userDto.getLastName());
-        user.setPhoneNumber(userDto.getPhoneNumber());
-        return user;
+        return new User(userDto.getFirstName()
+                , userDto.getLastName()
+                , userDto.getPhoneNumber());
     }
 
     public static UserDto toDto(User user) {
-        UserDto userDto = new UserDto();
-        userDto.setId(user.getId());
-        userDto.setFirstName(user.getFirstName());
-        userDto.setLastName(user.getLastName());
-        userDto.setPhoneNumber(user.getPhoneNumber());
-        return userDto;
+        return new UserDto(user.getId()
+                , user.getFirstName()
+                , user.getLastName()
+                ,user.getPhoneNumber());
     }
 
     public static Collection<UserDto> toListDto(Collection<User> users) {
