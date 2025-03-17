@@ -1,53 +1,62 @@
 package org.example.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.example.dto.UserDto;
-import org.example.service.impl.UserServiceImpl;
+import org.example.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Anatoliy Shikin
  */
 @RestController
-@RequestMapping("/users")
+@RequestMapping("users")
+@RequiredArgsConstructor
 public class UserController {
 
-    private final UserServiceImpl userServiceImpl;
-
-    public UserController(UserServiceImpl userServiceImpl) {
-        this.userServiceImpl = userServiceImpl;
-    }
+    private final UserService userService;
 
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
-        UserDto createdUser = userServiceImpl.createUser(userDto);
-        return ResponseEntity.ok(createdUser);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(userDto));
     }
 
-    @GetMapping("/{id}")
+    @PutMapping("update")
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
+        return ResponseEntity.ok(userService.update(userDto));
+    }
+
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
+        userService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
-        UserDto userDto = userServiceImpl.getUserById(id);
-        return ResponseEntity.ok(userDto);
+        return ResponseEntity.ok(userService.getUserById(id));
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<Collection<UserDto>> getUsersByLastName(@RequestParam String lastName) {
-        Collection<UserDto> usersByLastName = userServiceImpl.getUsersByLastName(lastName);
+    @GetMapping("search")
+    public ResponseEntity<List<UserDto>> getUsersByLastName(@RequestParam String lastName) {
+        List<UserDto> usersByLastName = userService.getUsersByLastName(lastName);
         return ResponseEntity.ok(usersByLastName);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<Collection<UserDto>> getAllUsers() {
-        Collection<UserDto> allUsers = userServiceImpl.getAllUsers();
+    @GetMapping("all")
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        List<UserDto> allUsers = userService.getAllUsers();
         return ResponseEntity.ok(allUsers);
     }
 }
