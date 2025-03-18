@@ -76,7 +76,11 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> getAllUsers() {
         List<User> allUsers = userRepository.findAll();
         List<UserDto> usersList = UserMapper.toListDto(allUsers);
-        logger.debug("Existing users have been found.");
+        if (usersList.isEmpty()) {
+            logger.debug("The list does not contain any users.");
+        } else {
+            logger.debug("Existing users have been found.");
+        }
         return usersList;
     }
 }
