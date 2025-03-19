@@ -2,30 +2,18 @@ package org.example.mapper;
 
 import org.example.dto.CompanyDto;
 import org.example.model.Company;
+import org.mapstruct.Mapper;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.List;
 
 /**
  * @author Anatoliy Shikin
  */
-public class CompanyMapper {
-    public static Company toEntity(CompanyDto companyDto) {
-        return new Company(companyDto.getName()
-                , companyDto.getBudget()
-                , companyDto.getEmployeesIds());
-    }
+@Mapper(componentModel = "spring")
+public interface CompanyMapper {
+    CompanyDto toDto(Company company);
 
-    public static CompanyDto toDto(Company company) {
-        return new CompanyDto(company.getId()
-                , company.getName()
-                , company.getBudget()
-                , company.getEmployeeIds());
-    }
+    Company toEntity(CompanyDto companyDto);
 
-    public static Collection<CompanyDto> toListDto(Collection<Company> companies) {
-        return companies.stream()
-                .map(CompanyMapper::toDto)
-                .collect(Collectors.toList());
-    }
+    List<CompanyDto> toListDto(List<Company> companies);
 }

@@ -1,20 +1,24 @@
 package org.example.service;
 
 import org.example.dto.CompanyDto;
-import org.example.model.Company;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Anatoliy Shikin
  */
 public interface CompanyService {
-    CompanyDto createCompany(CompanyDto companyDto);
+
+    CompanyDto create(CompanyDto companyDto);
+
+    CompanyDto update(CompanyDto companyDto);
+
+    void delete(Long id);
 
     CompanyDto getCompanyById(Long id);
 
-    CompanyDto getCompanyByName(String name);
+    List<CompanyDto> getCompanyByName(String name);
 
-    Collection<CompanyDto> getAllCompanies();
+    List<CompanyDto> getAllCompanies();
 
 }
