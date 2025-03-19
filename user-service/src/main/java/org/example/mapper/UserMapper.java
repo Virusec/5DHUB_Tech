@@ -2,33 +2,18 @@ package org.example.mapper;
 
 import org.example.dto.UserDto;
 import org.example.model.User;
+import org.mapstruct.Mapper;
 
 import java.util.List;
 
 /**
  * @author Anatoliy Shikin
  */
-public class UserMapper {
-    public static UserDto toDto(User user) {
-        return UserDto.builder()
-                .id(user.getId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .phoneNumber(user.getPhoneNumber())
-                .build();
-    }
+@Mapper(componentModel = "spring")
+public interface UserMapper {
+    UserDto toDto(User user);
 
-    public static User toEntity(UserDto userDto) {
-        return User.builder()
-                .firstName(userDto.getFirstName())
-                .lastName(userDto.getLastName())
-                .phoneNumber(userDto.getPhoneNumber())
-                .build();
-    }
+    User toEntity(UserDto userDto);
 
-    public static List<UserDto> toListDto(List<User> allUsers) {
-        return allUsers.stream()
-                .map(UserMapper::toDto)
-                .toList();
-    }
+    List<UserDto> toListDto(List<User> allUsers);
 }

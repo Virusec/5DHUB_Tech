@@ -21,12 +21,13 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    private final UserMapper userMapper;
     private final UserRepository userRepository;
 
     @Override
     public UserDto create(UserDto userDto) {
-        User user = UserMapper.toEntity(userDto);
-        UserDto createdUser = UserMapper.toDto(userRepository.save(user));
+        User user = userMapper.toEntity(userDto);
+        UserDto createdUser = userMapper.toDto(userRepository.save(user));
         logger.debug("User with id = {} has been created.", user.getId());
         return createdUser;
     }
@@ -39,7 +40,7 @@ public class UserServiceImpl implements UserService {
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setPhoneNumber(userDto.getPhoneNumber());
-        UserDto updatedUser = UserMapper.toDto(userRepository.save(user));
+        UserDto updatedUser = userMapper.toDto(userRepository.save(user));
         logger.debug("User with id = {} has been updated.", user.getId());
         return updatedUser;
     }
@@ -56,18 +57,19 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
-        UserDto foundUser = UserMapper.toDto(user);
+        UserDto foundUser = userMapper.toDto(user);
         logger.debug("User with id = {} has been found.", user.getId());
         return foundUser;
     }
-// TODO: add exception handling
+
+    // TODO: add exception handling
     @Override
     public List<UserDto> getUsersByLastName(String lastName) {
         List<User> byLastNameIgnoreCase = userRepository.findByLastNameIgnoreCase(lastName);
         if (byLastNameIgnoreCase.isEmpty()) {
             throw new UserNotFoundException(lastName);
         }
-        List<UserDto> usersList = UserMapper.toListDto(byLastNameIgnoreCase);
+        List<UserDto> usersList = userMapper.toListDto(byLastNameIgnoreCase);
         logger.debug("Users with last name = {} have been found.", lastName);
         return usersList;
     }
@@ -75,7 +77,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAllUsers() {
         List<User> allUsers = userRepository.findAll();
-        List<UserDto> usersList = UserMapper.toListDto(allUsers);
+        List<UserDto> usersList = userMapper.toListDto(allUsers);
         if (usersList.isEmpty()) {
             logger.debug("The list does not contain any users.");
         } else {
