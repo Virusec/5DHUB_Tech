@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UserDto {
+public class CompanyDto {
     private Long id;
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
+    private String name;
+    private Double budget;
+//TODO    private List<Long> employeesIds;
 }

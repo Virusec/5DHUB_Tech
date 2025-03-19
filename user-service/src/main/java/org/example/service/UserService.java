@@ -2,18 +2,22 @@ package org.example.service;
 
 import org.example.dto.UserDto;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Anatoliy Shikin
  */
 public interface UserService {
 
-    UserDto createUser(UserDto userDto);
+    UserDto create(UserDto userDto);
+
+    UserDto update(UserDto userDto);
+
+    void delete(Long id);
 
     UserDto getUserById(Long id);
 
-    Collection<UserDto> getUsersByLastName(String lastName);
+    List<UserDto> getUsersByLastName(String lastName);
 
-    Collection<UserDto> getAllUsers();
+    List<UserDto> getAllUsers();
 }

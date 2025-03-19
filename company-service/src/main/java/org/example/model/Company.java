@@ -14,17 +14,19 @@ import lombok.Setter;
  * @author Anatoliy Shikin
  */
 @Entity
-@Table(name = "users")
+@Table(name = "companies")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class User {
+public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
+    private String name;
+    private Double budget;
+
+//TODO    @ElementCollection
+//    private List<Long> employeeIds;
 }
