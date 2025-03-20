@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: changelog/companies-changelog.sql
+      relativeToChangelogFile: true
