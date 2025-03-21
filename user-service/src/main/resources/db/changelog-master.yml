@@ -1,4 +1,8 @@
 databaseChangeLog:
-  - include:
-      file: changelog/users-changelog.sql
-      relativeToChangelogFile: true
+  - changeSet:
+      id: 1
+      author: ashikin
+      changes:
+        - sqlFile:
+            path: changelog/changes/V001_create-users-table.sql
+            relativeToChangelogFile: true

@@ -1,4 +1,15 @@
 databaseChangeLog:
-  - include:
-      file: changelog/companies-changelog.sql
-      relativeToChangelogFile: true
+  - changeSet:
+      id: 1
+      author: ashikin
+      changes:
+        - sqlFile:
+            path: changelog/changes/V001_create-companies-table.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 2
+      author: ashikin
+      changes:
+        - sqlFile:
+            path: changelog/changes/V002_add-unique-constraint-name.sql
+            relativeToChangelogFile: true

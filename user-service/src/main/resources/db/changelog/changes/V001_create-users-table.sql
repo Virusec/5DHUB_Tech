@@ -1,6 +1,6 @@
 -- liquibase formatted sql
 
--- changeset shikin:create-users-table
+-- changeset ashikin:V001_create-users-table
 CREATE TABLE users
 (
     id BIGSERIAL PRIMARY KEY,

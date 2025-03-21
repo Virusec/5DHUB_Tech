@@ -69,7 +69,7 @@ public class CompanyServiceImpl implements CompanyService {
             throw new CompanyNotFoundException(name);
         }
         List<CompanyDto> foundCompanyByName = companyMapper.toListDto(companyList);
-        logger.debug("Company with last name = {} has been found.", name);
+        logger.debug("Company with name = {} has been found.", name);
         return foundCompanyByName;
     }
 

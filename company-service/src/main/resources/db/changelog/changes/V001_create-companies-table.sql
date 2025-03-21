@@ -1,6 +1,6 @@
 -- liquibase formatted sql
 
--- changeset shikin:create-companies-table
+-- changeset ashikin:V001_create-companies-table
 CREATE TABLE companies
 (
     id BIGSERIAL PRIMARY KEY,
