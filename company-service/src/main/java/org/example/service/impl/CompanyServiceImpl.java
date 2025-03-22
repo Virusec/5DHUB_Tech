@@ -9,6 +9,7 @@ import org.example.model.Company;
 import org.example.repository.CompanyRepository;
 import org.example.service.CompanyService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class CompanyServiceImpl implements CompanyService {
     private final CompanyMapper companyMapper;
     private final CompanyRepository companyRepository;
 
+    @Transactional
     @Override
     public CompanyDto create(CompanyDto companyDto) {
         Company company = companyMapper.toEntity(companyDto);
@@ -31,6 +33,7 @@ public class CompanyServiceImpl implements CompanyService {
         return createdCompany;
     }
 
+    @Transactional
     @Override
     public CompanyDto update(CompanyDto companyDto) {
         Company company = companyRepository.findById(companyDto.getId())
@@ -43,6 +46,7 @@ public class CompanyServiceImpl implements CompanyService {
         return updatedUser;
     }
 
+    @Transactional
     @Override
     public void delete(Long id) {
         companyRepository.findById(id)
