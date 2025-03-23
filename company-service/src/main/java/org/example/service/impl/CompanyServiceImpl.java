@@ -66,12 +66,10 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public List<CompanyDto> getCompanyByName(String name) {
-        List<Company> companyList = companyRepository.findByNameIgnoreCase(name);
-        if (companyList.isEmpty()) {
-            throw new CompanyNotFoundException(name);
-        }
-        List<CompanyDto> foundCompanyByName = companyMapper.toListDto(companyList);
+    public CompanyDto getCompanyByName(String name) {
+        Company company = companyRepository.findByNameIgnoreCase(name)
+                .orElseThrow(() -> new CompanyNotFoundException(name));
+        CompanyDto foundCompanyByName = companyMapper.toDto(company);
         log.debug("Company with name = {} has been found.", name);
         return foundCompanyByName;
     }

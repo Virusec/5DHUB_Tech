@@ -56,7 +56,7 @@ public class CompanyController {
     }
 
     @GetMapping("search")
-    public List<CompanyDto> getCompanyByName(@RequestParam String name) {
+    public CompanyDto getCompanyByName(@RequestParam String name) {
         log.info("The method was invoked to find company by name = {}.", name);
         return companyService.getCompanyByName(name);
     }

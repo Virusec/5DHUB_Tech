@@ -17,7 +17,7 @@ public interface CompanyService {
 
     CompanyDto getCompanyById(Long id);
 
-    List<CompanyDto> getCompanyByName(String name);
+    CompanyDto getCompanyByName(String name);
 
     List<CompanyDto> getAllCompanies();
 
