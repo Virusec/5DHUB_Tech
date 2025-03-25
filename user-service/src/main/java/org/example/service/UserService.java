@@ -1,6 +1,7 @@
 package org.example.service;
 
-import org.example.dto.UserDto;
+import org.example.dto.UserInputDto;
+import org.example.dto.UserOutputDto;
 
 import java.util.List;
 
@@ -9,15 +10,15 @@ import java.util.List;
  */
 public interface UserService {
 
-    UserDto create(UserDto userDto);
+    UserOutputDto create(UserInputDto userInputDto);
 
-    UserDto update(UserDto userDto);
+    UserOutputDto update(Long id, UserInputDto userInputDto);
 
     void delete(Long id);
 
-    UserDto getUserById(Long id);
+    UserOutputDto getUserById(Long id);
 
-    List<UserDto> getUsersByLastName(String lastName);
+    List<UserOutputDto> getUsersByLastName(String lastName);
 
-    List<UserDto> getAllUsers();
+    List<UserOutputDto> getAllUsers();
 }

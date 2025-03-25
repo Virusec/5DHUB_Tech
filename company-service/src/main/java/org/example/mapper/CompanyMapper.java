@@ -1,8 +1,11 @@
 package org.example.mapper;
 
-import org.example.dto.CompanyDto;
+import org.example.dto.CompanyInputDto;
+import org.example.dto.CompanyOutputDto;
 import org.example.model.Company;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
@@ -11,9 +14,14 @@ import java.util.List;
  */
 @Mapper(componentModel = "spring")
 public interface CompanyMapper {
-    CompanyDto toDto(Company company);
 
-    Company toEntity(CompanyDto companyDto);
+    CompanyOutputDto toDto(Company company);
 
-    List<CompanyDto> toListDto(List<Company> companies);
+    @Mapping(target = "id", ignore = true)
+    Company toEntity(CompanyInputDto companyDto);
+
+    List<CompanyOutputDto> toListDto(List<Company> companies);
+
+    @Mapping(target = "id", ignore = true)
+    void updateCompanyFromDto(CompanyInputDto companyInputDto, @MappingTarget Company company);
 }

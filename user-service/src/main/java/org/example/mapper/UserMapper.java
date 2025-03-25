@@ -1,8 +1,11 @@
 package org.example.mapper;
 
-import org.example.dto.UserDto;
+import org.example.dto.UserInputDto;
+import org.example.dto.UserOutputDto;
 import org.example.model.User;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
@@ -11,9 +14,14 @@ import java.util.List;
  */
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-    UserDto toDto(User user);
 
-    User toEntity(UserDto userDto);
+    UserOutputDto toDto(User user);
 
-    List<UserDto> toListDto(List<User> allUsers);
+    @Mapping(target = "id", ignore = true)
+    User toEntity(UserInputDto userInputDto);
+
+    List<UserOutputDto> toListDto(List<User> allUsers);
+
+    @Mapping(target = "id", ignore = true)
+    void updateUserFromDto(UserInputDto userInputDto, @MappingTarget User user);
 }

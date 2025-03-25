@@ -2,7 +2,8 @@ package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.dto.UserDto;
+import org.example.dto.UserInputDto;
+import org.example.dto.UserOutputDto;
 import org.example.exceptions.EntityNotFoundException;
 import org.example.mapper.UserMapper;
 import org.example.model.User;
@@ -26,21 +27,19 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserDto create(UserDto userDto) {
-        User user = userMapper.toEntity(userDto);
-        UserDto createdUser = userMapper.toDto(userRepository.save(user));
+    public UserOutputDto create(UserInputDto userInputDto) {
+        User user = userMapper.toEntity(userInputDto);
+        UserOutputDto createdUser = userMapper.toDto(userRepository.save(user));
         log.debug("User with id = {} has been created.", user.getId());
         return createdUser;
     }
 
     @Transactional
     @Override
-    public UserDto update(UserDto userDto) {
-        User user = getUserOrThrow(userDto.getId());
-        user.setFirstName(userDto.getFirstName());
-        user.setLastName(userDto.getLastName());
-        user.setPhoneNumber(userDto.getPhoneNumber());
-        UserDto updatedUser = userMapper.toDto(userRepository.save(user));
+    public UserOutputDto update(Long id, UserInputDto userInputDto) {
+        User user = getUserOrThrow(id);
+        userMapper.updateUserFromDto(userInputDto, user);
+        UserOutputDto updatedUser = userMapper.toDto(userRepository.save(user));
         log.debug("User with id = {} has been updated.", user.getId());
         return updatedUser;
     }
@@ -54,27 +53,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserById(Long id) {
+    public UserOutputDto getUserById(Long id) {
         User user = getUserOrThrow(id);
-        UserDto foundUser = userMapper.toDto(user);
+        UserOutputDto foundUser = userMapper.toDto(user);
         log.debug("User with id = {} has been found.", user.getId());
         return foundUser;
     }
 
     @Override
-    public List<UserDto> getUsersByLastName(String lastName) {
-        List<User> byLastNameIgnoreCase = userRepository.findByLastNameIgnoreCase(lastName);
-        if (byLastNameIgnoreCase.isEmpty()) {
+    public List<UserOutputDto> getUsersByLastName(String lastName) {
+        List<User> users = userRepository.findByLastNameIgnoreCase(lastName);
+        if (users.isEmpty()) {
             throw new EntityNotFoundException("User with last name = " + lastName + " was not found!");
         }
-        List<UserDto> usersList = userMapper.toListDto(byLastNameIgnoreCase);
+        List<UserOutputDto> usersList = userMapper.toListDto(users);
         log.debug("Users with last name = {} have been found.", lastName);
         return usersList;
     }
     @Override
-    public List<UserDto> getAllUsers() {
+    public List<UserOutputDto> getAllUsers() {
         List<User> allUsers = userRepository.findAll();
-        List<UserDto> usersList = userMapper.toListDto(allUsers);
+        List<UserOutputDto> usersList = userMapper.toListDto(allUsers);
         if (usersList.isEmpty()) {
             log.debug("The list does not contain any users!");
         } else {

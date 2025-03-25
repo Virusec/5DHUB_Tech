@@ -1,6 +1,7 @@
 package org.example.service;
 
-import org.example.dto.CompanyDto;
+import org.example.dto.CompanyInputDto;
+import org.example.dto.CompanyOutputDto;
 
 import java.util.List;
 
@@ -9,16 +10,16 @@ import java.util.List;
  */
 public interface CompanyService {
 
-    CompanyDto create(CompanyDto companyDto);
+    CompanyOutputDto create(CompanyInputDto companyInputDto);
 
-    CompanyDto update(CompanyDto companyDto);
+    CompanyOutputDto update(Long id, CompanyInputDto companyInputDto);
 
     void delete(Long id);
 
-    CompanyDto getCompanyById(Long id);
+    CompanyOutputDto getCompanyById(Long id);
 
-    CompanyDto getCompanyByName(String name);
+    CompanyOutputDto getCompanyByName(String name);
 
-    List<CompanyDto> getAllCompanies();
+    List<CompanyOutputDto> getAllCompanies();
 
 }
