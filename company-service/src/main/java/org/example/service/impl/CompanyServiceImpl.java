@@ -3,7 +3,7 @@ package org.example.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.dto.CompanyDto;
-import org.example.exception.CompanyNotFoundException;
+import org.example.exception.EntityNotFoundException;
 import org.example.mapper.CompanyMapper;
 import org.example.model.Company;
 import org.example.repository.CompanyRepository;
@@ -36,21 +36,18 @@ public class CompanyServiceImpl implements CompanyService {
     @Transactional
     @Override
     public CompanyDto update(CompanyDto companyDto) {
-        Company company = companyRepository.findById(companyDto.getId())
-                .orElseThrow(() -> new CompanyNotFoundException(companyDto.getId()));
-        company.setId(companyDto.getId());
+        Company company = getCompanyOrThrow(companyDto.getId());
         company.setName(companyDto.getName());
         company.setBudget(companyDto.getBudget());
-        CompanyDto updatedUser = companyMapper.toDto(companyRepository.save(company));
+        CompanyDto updatedCompany = companyMapper.toDto(companyRepository.save(company));
         log.debug("Company with id = {} has been updated.", company.getId());
-        return updatedUser;
+        return updatedCompany;
     }
 
     @Transactional
     @Override
     public void delete(Long id) {
-        companyRepository.findById(id)
-                .orElseThrow(() -> new CompanyNotFoundException(id));
+        getCompanyOrThrow(id);
         companyRepository.deleteById(id);
         log.debug("Company with id = {} has been deleted.", id);
     }
@@ -58,8 +55,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDto getCompanyById(Long id) {
-        Company company = companyRepository.findById(id)
-                .orElseThrow(() -> new CompanyNotFoundException(id));
+        Company company = getCompanyOrThrow(id);
         CompanyDto foundCompany = companyMapper.toDto(company);
         log.debug("Company with id = {} has been found.", company.getId());
         return foundCompany;
@@ -68,7 +64,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public CompanyDto getCompanyByName(String name) {
         Company company = companyRepository.findByNameIgnoreCase(name)
-                .orElseThrow(() -> new CompanyNotFoundException(name));
+                .orElseThrow(() -> new EntityNotFoundException("Company with name " + name + " was not found!"));
         CompanyDto foundCompanyByName = companyMapper.toDto(company);
         log.debug("Company with name = {} has been found.", name);
         return foundCompanyByName;
@@ -84,5 +80,10 @@ public class CompanyServiceImpl implements CompanyService {
             log.debug("Existing companies have been found.");
         }
         return listDto;
+    }
+
+    private Company getCompanyOrThrow(Long id) {
+        return companyRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Company with id " + id + " was not found!"));
     }
 }
