@@ -28,7 +28,6 @@ public class CompanyServiceImpl implements CompanyService {
     @Transactional
     @Override
     public CompanyOutputDto create(CompanyInputDto companyInputDto) {
-        validateCompanyInput(companyInputDto);
         Company company = companyMapper.toEntity(companyInputDto);
         CompanyOutputDto createdCompany = companyMapper.toDto(companyRepository.save(company));
         log.debug("Company with id = {} has been created.", company.getId());
@@ -38,7 +37,6 @@ public class CompanyServiceImpl implements CompanyService {
     @Transactional
     @Override
     public CompanyOutputDto update(Long id, CompanyInputDto companyInputDto) {
-        validateCompanyInput(companyInputDto);
         Company company = getCompanyOrThrow(id);
         companyMapper.updateCompanyFromDto(companyInputDto, company);
         CompanyOutputDto updatedCompany = companyMapper.toDto(companyRepository.save(company));
@@ -87,11 +85,5 @@ public class CompanyServiceImpl implements CompanyService {
     private Company getCompanyOrThrow(Long id) {
         return companyRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Company with id " + id + " was not found!"));
-    }
-
-    private void validateCompanyInput(CompanyInputDto companyInputDto) {
-        if (companyInputDto.getName() == null || companyInputDto.getName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Name of company must not be empty");
-        }
     }
 }

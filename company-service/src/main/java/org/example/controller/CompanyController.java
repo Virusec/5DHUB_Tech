@@ -1,11 +1,13 @@
 package org.example.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.model.dto.CompanyInputDto;
 import org.example.model.dto.CompanyOutputDto;
 import org.example.service.CompanyService;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,20 +28,21 @@ import java.util.List;
 @RequestMapping("companies")
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class CompanyController {
 
     private final CompanyService companyService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CompanyOutputDto createCompany(@RequestBody CompanyInputDto companyInputDto) {
+    public CompanyOutputDto createCompany(@RequestBody @Valid CompanyInputDto companyInputDto) {
         log.info("The method was invoked to create company.");
         return companyService.create(companyInputDto);
     }
 
     @PutMapping("update/{id}")
     public CompanyOutputDto updateCompany(@PathVariable Long id,
-                                          @RequestBody CompanyInputDto companyInputDto) {
+                                          @RequestBody @Valid CompanyInputDto companyInputDto) {
         log.info("The method was invoked to update company with id = {}.", id);
         return companyService.update(id, companyInputDto);
     }

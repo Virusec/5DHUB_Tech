@@ -28,7 +28,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserOutputDto create(UserInputDto userInputDto) {
-        validateUserInput(userInputDto);
         User user = userMapper.toEntity(userInputDto);
         UserOutputDto createdUser = userMapper.toDto(userRepository.save(user));
         log.debug("User with id = {} has been created.", user.getId());
@@ -38,7 +37,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserOutputDto update(Long id, UserInputDto userInputDto) {
-        validateUserInput(userInputDto);
         User user = getUserOrThrow(id);
         userMapper.updateUserFromDto(userInputDto, user);
         UserOutputDto updatedUser = userMapper.toDto(userRepository.save(user));
@@ -88,17 +86,5 @@ public class UserServiceImpl implements UserService {
     private User getUserOrThrow(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User with id = " + id + " was not found!"));
-    }
-
-    private void validateUserInput(UserInputDto userInputDto) {
-        if (userInputDto.getFirstName() == null || userInputDto.getFirstName().trim().isEmpty()) {
-            throw new IllegalArgumentException("First name must not be empty");
-        }
-        if (userInputDto.getLastName() == null || userInputDto.getLastName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Last name must not be empty");
-        }
-        if (userInputDto.getPhoneNumber() == null || userInputDto.getPhoneNumber().trim().isEmpty()) {
-            throw new IllegalArgumentException("Phone number must not be empty");
-        }
     }
 }
