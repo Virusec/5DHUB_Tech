@@ -2,8 +2,8 @@ package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.dto.CompanyInputDto;
-import org.example.dto.CompanyOutputDto;
+import org.example.model.dto.CompanyInputDto;
+import org.example.model.dto.CompanyOutputDto;
 import org.example.service.CompanyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;

@@ -2,8 +2,8 @@ package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.dto.UserInputDto;
-import org.example.dto.UserOutputDto;
+import org.example.model.dto.UserInputDto;
+import org.example.model.dto.UserOutputDto;
 import org.example.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;

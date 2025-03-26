@@ -1,7 +1,7 @@
 package org.example.service;
 
-import org.example.dto.UserInputDto;
-import org.example.dto.UserOutputDto;
+import org.example.model.dto.UserInputDto;
+import org.example.model.dto.UserOutputDto;
 
 import java.util.List;
 

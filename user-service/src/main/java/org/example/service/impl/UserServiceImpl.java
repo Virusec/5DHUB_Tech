@@ -2,11 +2,11 @@ package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.dto.UserInputDto;
-import org.example.dto.UserOutputDto;
+import org.example.model.dto.UserInputDto;
+import org.example.model.dto.UserOutputDto;
 import org.example.exceptions.EntityNotFoundException;
 import org.example.mapper.UserMapper;
-import org.example.model.User;
+import org.example.model.domain.User;
 import org.example.repository.UserRepository;
 import org.example.service.UserService;
 import org.springframework.stereotype.Service;
@@ -28,6 +28,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserOutputDto create(UserInputDto userInputDto) {
+        validateUserInput(userInputDto);
         User user = userMapper.toEntity(userInputDto);
         UserOutputDto createdUser = userMapper.toDto(userRepository.save(user));
         log.debug("User with id = {} has been created.", user.getId());
@@ -37,6 +38,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserOutputDto update(Long id, UserInputDto userInputDto) {
+        validateUserInput(userInputDto);
         User user = getUserOrThrow(id);
         userMapper.updateUserFromDto(userInputDto, user);
         UserOutputDto updatedUser = userMapper.toDto(userRepository.save(user));
@@ -70,6 +72,7 @@ public class UserServiceImpl implements UserService {
         log.debug("Users with last name = {} have been found.", lastName);
         return usersList;
     }
+
     @Override
     public List<UserOutputDto> getAllUsers() {
         List<User> allUsers = userRepository.findAll();
@@ -85,5 +88,17 @@ public class UserServiceImpl implements UserService {
     private User getUserOrThrow(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User with id = " + id + " was not found!"));
+    }
+
+    private void validateUserInput(UserInputDto userInputDto) {
+        if (userInputDto.getFirstName() == null || userInputDto.getFirstName().trim().isEmpty()) {
+            throw new IllegalArgumentException("First name must not be empty");
+        }
+        if (userInputDto.getLastName() == null || userInputDto.getLastName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Last name must not be empty");
+        }
+        if (userInputDto.getPhoneNumber() == null || userInputDto.getPhoneNumber().trim().isEmpty()) {
+            throw new IllegalArgumentException("Phone number must not be empty");
+        }
     }
 }

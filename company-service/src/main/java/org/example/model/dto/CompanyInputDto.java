@@ -1,4 +1,4 @@
-package org.example.dto;
+package org.example.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,9 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UserOutputDto {
-    private Long id;
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
+public class CompanyInputDto {
+    private String name;
+    private Double budget;
 }

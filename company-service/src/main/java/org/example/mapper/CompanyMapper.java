@@ -1,8 +1,8 @@
 package org.example.mapper;
 
-import org.example.dto.CompanyInputDto;
-import org.example.dto.CompanyOutputDto;
-import org.example.model.Company;
+import org.example.model.dto.CompanyInputDto;
+import org.example.model.dto.CompanyOutputDto;
+import org.example.model.domain.Company;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
