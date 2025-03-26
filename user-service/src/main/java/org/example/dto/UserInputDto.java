@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UserDto {
-    private Long id;
+public class UserInputDto {
+//    TODO @NotBlank(message = "First name must not be empty")
     private String firstName;
     private String lastName;
     private String phoneNumber;

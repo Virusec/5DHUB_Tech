@@ -2,10 +2,9 @@ package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.dto.CompanyDto;
+import org.example.dto.CompanyInputDto;
+import org.example.dto.CompanyOutputDto;
 import org.example.service.CompanyService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,44 +28,44 @@ import java.util.List;
 @Slf4j
 public class CompanyController {
 
-    Logger logger = LoggerFactory.getLogger(CompanyController.class);
     private final CompanyService companyService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CompanyDto createCompany(@RequestBody CompanyDto companyDto) {
-        logger.info("The method was invoked to create company.");
-        return companyService.create(companyDto);
+    public CompanyOutputDto createCompany(@RequestBody CompanyInputDto companyInputDto) {
+        log.info("The method was invoked to create company.");
+        return companyService.create(companyInputDto);
     }
 
-    @PutMapping("update")
-    public CompanyDto updateCompany(@RequestBody CompanyDto companyDto) {
-        logger.info("The method was invoked to update company with id = {}.", companyDto.getId());
-        return companyService.update(companyDto);
+    @PutMapping("update/{id}")
+    public CompanyOutputDto updateCompany(@PathVariable Long id,
+                                          @RequestBody CompanyInputDto companyInputDto) {
+        log.info("The method was invoked to update company with id = {}.", id);
+        return companyService.update(id, companyInputDto);
     }
 
     @DeleteMapping("delete/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCompanyById(@PathVariable Long id) {
-        logger.info("The method was invoked to delete company with id = {}.",id);
+        log.info("The method was invoked to delete company with id = {}.", id);
         companyService.delete(id);
     }
 
     @GetMapping("{id}")
-    public CompanyDto getCompanyById(@PathVariable Long id) {
-        logger.info("The method was invoked to find company by id = {}.",id);
+    public CompanyOutputDto getCompanyById(@PathVariable Long id) {
+        log.info("The method was invoked to find company by id = {}.", id);
         return companyService.getCompanyById(id);
     }
 
     @GetMapping("search")
-    public List<CompanyDto> getCompanyByName(@RequestParam String name) {
-        logger.info("The method was invoked to find company by name = {}.", name);
+    public CompanyOutputDto getCompanyByName(@RequestParam String name) {
+        log.info("The method was invoked to find company by name = {}.", name);
         return companyService.getCompanyByName(name);
     }
 
     @GetMapping("all")
-    public List<CompanyDto> getAllCompanies() {
-        logger.info("The method was invoked to find all existing companies.");
+    public List<CompanyOutputDto> getAllCompanies() {
+        log.info("The method was invoked to find all existing companies.");
         return companyService.getAllCompanies();
     }
 }

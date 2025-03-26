@@ -1,15 +1,16 @@
 package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.example.dto.CompanyDto;
-import org.example.exception.CompanyNotFoundException;
+import lombok.extern.slf4j.Slf4j;
+import org.example.dto.CompanyInputDto;
+import org.example.dto.CompanyOutputDto;
+import org.example.exception.EntityNotFoundException;
 import org.example.mapper.CompanyMapper;
 import org.example.model.Company;
 import org.example.repository.CompanyRepository;
 import org.example.service.CompanyService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,70 +19,71 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CompanyServiceImpl implements CompanyService {
 
-    Logger logger = LoggerFactory.getLogger(CompanyServiceImpl.class);
     private final CompanyMapper companyMapper;
     private final CompanyRepository companyRepository;
 
+    @Transactional
     @Override
-    public CompanyDto create(CompanyDto companyDto) {
-        Company company = companyMapper.toEntity(companyDto);
-        CompanyDto createdCompany = companyMapper.toDto(companyRepository.save(company));
-        logger.debug("Company with id = {} has been created.", company.getId());
+    public CompanyOutputDto create(CompanyInputDto companyInputDto) {
+        Company company = companyMapper.toEntity(companyInputDto);
+        CompanyOutputDto createdCompany = companyMapper.toDto(companyRepository.save(company));
+        log.debug("Company with id = {} has been created.", company.getId());
         return createdCompany;
     }
 
+    @Transactional
     @Override
-    public CompanyDto update(CompanyDto companyDto) {
-        Company company = companyRepository.findById(companyDto.getId())
-                .orElseThrow(() -> new CompanyNotFoundException(companyDto.getId()));
-        company.setId(companyDto.getId());
-        company.setName(companyDto.getName());
-        company.setBudget(companyDto.getBudget());
-        CompanyDto updatedUser = companyMapper.toDto(companyRepository.save(company));
-        logger.debug("Company with id = {} has been updated.", company.getId());
-        return updatedUser;
+    public CompanyOutputDto update(Long id, CompanyInputDto companyInputDto) {
+        Company company = getCompanyOrThrow(id);
+        companyMapper.updateCompanyFromDto(companyInputDto, company);
+        CompanyOutputDto updatedCompany = companyMapper.toDto(companyRepository.save(company));
+        log.debug("Company with id = {} has been updated.", company.getId());
+        return updatedCompany;
     }
 
+    @Transactional
     @Override
     public void delete(Long id) {
-        companyRepository.findById(id)
-                .orElseThrow(() -> new CompanyNotFoundException(id));
+        getCompanyOrThrow(id);
         companyRepository.deleteById(id);
-        logger.debug("Company with id = {} has been deleted.", id);
+        log.debug("Company with id = {} has been deleted.", id);
     }
 
 
     @Override
-    public CompanyDto getCompanyById(Long id) {
-        Company company = companyRepository.findById(id)
-                .orElseThrow(() -> new CompanyNotFoundException(id));
-        CompanyDto foundCompany = companyMapper.toDto(company);
-        logger.debug("Company with id = {} has been found.", company.getId());
+    public CompanyOutputDto getCompanyById(Long id) {
+        Company company = getCompanyOrThrow(id);
+        CompanyOutputDto foundCompany = companyMapper.toDto(company);
+        log.debug("Company with id = {} has been found.", company.getId());
         return foundCompany;
     }
 
     @Override
-    public List<CompanyDto> getCompanyByName(String name) {
-        List<Company> companyList = companyRepository.findByNameIgnoreCase(name);
-        if (companyList.isEmpty()) {
-            throw new CompanyNotFoundException(name);
-        }
-        List<CompanyDto> foundCompanyByName = companyMapper.toListDto(companyList);
-        logger.debug("Company with name = {} has been found.", name);
+    public CompanyOutputDto getCompanyByName(String name) {
+        Company company = companyRepository.findByNameIgnoreCase(name)
+                .orElseThrow(() -> new EntityNotFoundException("Company with name " + name + " was not found!"));
+        CompanyOutputDto foundCompanyByName = companyMapper.toDto(company);
+        log.debug("Company with name = {} has been found.", name);
         return foundCompanyByName;
     }
 
     @Override
-    public List<CompanyDto> getAllCompanies() {
+    public List<CompanyOutputDto> getAllCompanies() {
         List<Company> allCompanies = companyRepository.findAll();
-        List<CompanyDto> listDto = companyMapper.toListDto(allCompanies);
+        List<CompanyOutputDto> listDto = companyMapper.toListDto(allCompanies);
         if (listDto.isEmpty()) {
-            logger.debug("The list does not contain any companies.");
+            log.debug("The list does not contain any companies.");
         } else {
-            logger.debug("Existing companies have been found.");
+            log.debug("Existing companies have been found.");
         }
         return listDto;
+    }
+
+    private Company getCompanyOrThrow(Long id) {
+        return companyRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Company with id " + id + " was not found!"));
     }
 }
