@@ -27,15 +27,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException exception) {
-        log.error("Data integrity violation: {}", exception.getMessage());
-
-        String detailedMessage = exception.getMostSpecificCause().getMessage();
         String userMessage = "An error occurred while saving the data.";
-
-        if (detailedMessage != null && detailedMessage.contains("unique_company_name")) {
+        if (exception.getMessage() != null && exception.getMessage().contains("unique_company_name")) {
             userMessage = "A company with that name already exists. Please choose a different name.";
         }
-
+        log.error(userMessage);
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.CONFLICT.value(), userMessage);
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }

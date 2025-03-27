@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class CompanyInputDto {
     @NotBlank(message = "Name of company must not be empty!")
     private String name;
-    @NotNull(message = "Budget must not be null")
-    @PositiveOrZero(message = "Budget must not be less than 0!")
+    @NotNull(message = "Must not be null!")
+    @PositiveOrZero(message = "Must not be less than 0!")
     private Double budget;
 }
