@@ -6,6 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.model.dto.UserInputDto;
 import org.example.model.dto.UserOutputDto;
 import org.example.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * @author Anatoliy Shikin
@@ -61,14 +63,18 @@ public class UserController {
     }
 
     @GetMapping("search")
-    public List<UserOutputDto> getUsersByLastName(@RequestParam String lastName) {
+    public Page<UserOutputDto> getUsersByLastName(
+            @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
+            @RequestParam String lastName) {
         log.info("The method was invoked to find users by last name = {}.", lastName);
-        return userService.getUsersByLastName(lastName);
+        return userService.getUsersByLastName(pageable, lastName);
     }
 
     @GetMapping("all")
-    public List<UserOutputDto> getAllUsers() {
+    public Page<UserOutputDto> getAllUsers(
+            @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.ASC) Pageable pageable
+    ) {
         log.info("The method was invoked to find all existing users.");
-        return userService.getAllUsers();
+        return userService.getAllUsers(pageable);
     }
 }

@@ -6,6 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.model.dto.CompanyInputDto;
 import org.example.model.dto.CompanyOutputDto;
 import org.example.service.CompanyService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * @author Anatoliy Shikin
@@ -67,8 +69,10 @@ public class CompanyController {
     }
 
     @GetMapping("all")
-    public List<CompanyOutputDto> getAllCompanies() {
+    public Page<CompanyOutputDto> getAllCompanies(
+            @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.ASC) Pageable pageable
+    ) {
         log.info("The method was invoked to find all existing companies.");
-        return companyService.getAllCompanies();
+        return companyService.getAllCompanies(pageable);
     }
 }

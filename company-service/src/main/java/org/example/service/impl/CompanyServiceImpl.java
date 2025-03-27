@@ -9,10 +9,10 @@ import org.example.mapper.CompanyMapper;
 import org.example.model.domain.Company;
 import org.example.repository.CompanyRepository;
 import org.example.service.CompanyService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * @author Anatoliy Shikin
@@ -71,15 +71,14 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public List<CompanyOutputDto> getAllCompanies() {
-        List<Company> allCompanies = companyRepository.findAll();
-        List<CompanyOutputDto> listDto = companyMapper.toListDto(allCompanies);
-        if (listDto.isEmpty()) {
+    public Page<CompanyOutputDto> getAllCompanies(Pageable pageable) {
+        Page<Company> companyPage = companyRepository.findAll(pageable);
+        if (companyPage.isEmpty()) {
             log.debug("The list does not contain any companies.");
         } else {
             log.debug("Existing companies have been found.");
         }
-        return listDto;
+        return companyPage.map(companyMapper::toDto);
     }
 
     private Company getCompanyOrThrow(Long id) {
