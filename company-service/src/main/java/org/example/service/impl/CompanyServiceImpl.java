@@ -2,11 +2,11 @@ package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.dto.CompanyInputDto;
-import org.example.dto.CompanyOutputDto;
+import org.example.model.dto.CompanyInputDto;
+import org.example.model.dto.CompanyOutputDto;
 import org.example.exception.EntityNotFoundException;
 import org.example.mapper.CompanyMapper;
-import org.example.model.Company;
+import org.example.model.domain.Company;
 import org.example.repository.CompanyRepository;
 import org.example.service.CompanyService;
 import org.springframework.stereotype.Service;

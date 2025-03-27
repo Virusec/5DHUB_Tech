@@ -1,8 +1,8 @@
 package org.example.mapper;
 
-import org.example.dto.UserInputDto;
-import org.example.dto.UserOutputDto;
-import org.example.model.User;
+import org.example.model.dto.UserInputDto;
+import org.example.model.dto.UserOutputDto;
+import org.example.model.domain.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
