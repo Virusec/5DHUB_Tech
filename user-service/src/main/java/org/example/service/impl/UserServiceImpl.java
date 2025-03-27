@@ -9,10 +9,10 @@ import org.example.mapper.UserMapper;
 import org.example.model.domain.User;
 import org.example.repository.UserRepository;
 import org.example.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * @author Anatoliy Shikin
@@ -61,26 +61,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserOutputDto> getUsersByLastName(String lastName) {
-        List<User> users = userRepository.findByLastNameIgnoreCase(lastName);
-        if (users.isEmpty()) {
+    public Page<UserOutputDto> getUsersByLastName(Pageable pageable, String lastName) {
+        Page<User> usersPage = userRepository.findByLastNameIgnoreCase(pageable, lastName);
+        if (usersPage.isEmpty()) {
             throw new EntityNotFoundException("User with last name = " + lastName + " was not found!");
         }
-        List<UserOutputDto> usersList = userMapper.toListDto(users);
         log.debug("Users with last name = {} have been found.", lastName);
-        return usersList;
+        return usersPage.map(userMapper::toDto);
     }
 
     @Override
-    public List<UserOutputDto> getAllUsers() {
-        List<User> allUsers = userRepository.findAll();
-        List<UserOutputDto> usersList = userMapper.toListDto(allUsers);
-        if (usersList.isEmpty()) {
+    public Page<UserOutputDto> getAllUsers(Pageable pageable) {
+        Page<User> usersPage = userRepository.findAll(pageable);
+        if (usersPage.isEmpty()) {
             log.debug("The list does not contain any users!");
         } else {
             log.debug("Existing users have been found.");
         }
-        return usersList;
+        return usersPage.map(userMapper::toDto);
     }
 
     private User getUserOrThrow(Long id) {

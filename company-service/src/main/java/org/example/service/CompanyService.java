@@ -2,8 +2,8 @@ package org.example.service;
 
 import org.example.model.dto.CompanyInputDto;
 import org.example.model.dto.CompanyOutputDto;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * @author Anatoliy Shikin
@@ -20,6 +20,6 @@ public interface CompanyService {
 
     CompanyOutputDto getCompanyByName(String name);
 
-    List<CompanyOutputDto> getAllCompanies();
+    Page<CompanyOutputDto> getAllCompanies(Pageable pageable);
 
 }
