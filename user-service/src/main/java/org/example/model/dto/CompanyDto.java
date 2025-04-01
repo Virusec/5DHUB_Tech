@@ -10,10 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UserOutputDto {
+public class CompanyDto {
     private Long id;
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
-    private CompanyDto companyDto;
+    private String name;
+    private Double budget;
 }

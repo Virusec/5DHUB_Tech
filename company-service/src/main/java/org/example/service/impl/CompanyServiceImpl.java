@@ -7,12 +7,17 @@ import org.example.model.dto.CompanyOutputDto;
 import org.example.exception.EntityNotFoundException;
 import org.example.mapper.CompanyMapper;
 import org.example.model.domain.Company;
+import org.example.model.dto.UserDto;
 import org.example.repository.CompanyRepository;
 import org.example.service.CompanyService;
+import org.example.service.UserClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Anatoliy Shikin
@@ -24,6 +29,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyMapper companyMapper;
     private final CompanyRepository companyRepository;
+    private final UserClient userClient;
 
     @Transactional
     @Override
@@ -57,6 +63,12 @@ public class CompanyServiceImpl implements CompanyService {
     public CompanyOutputDto getCompanyById(Long id) {
         Company company = getCompanyOrThrow(id);
         CompanyOutputDto foundCompany = companyMapper.toDto(company);
+        if (company.getEmployeeIds() != null && !company.getEmployeeIds().isEmpty()) {
+            List<UserDto> users = userClient.getUsersByIds(company.getEmployeeIds());
+            foundCompany.setEmployees(users);
+        } else {
+            foundCompany.setEmployees(Collections.emptyList());
+        }
         log.debug("Company with id = {} has been found.", company.getId());
         return foundCompany;
     }

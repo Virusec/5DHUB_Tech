@@ -2,12 +2,14 @@ package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.model.dto.CompanyDto;
 import org.example.model.dto.UserInputDto;
 import org.example.model.dto.UserOutputDto;
 import org.example.exceptions.EntityNotFoundException;
 import org.example.mapper.UserMapper;
 import org.example.model.domain.User;
 import org.example.repository.UserRepository;
+import org.example.service.CompanyClient;
 import org.example.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +26,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
     private final UserRepository userRepository;
+    private final CompanyClient companyClient;
 
     @Transactional
     @Override
@@ -56,6 +59,10 @@ public class UserServiceImpl implements UserService {
     public UserOutputDto getUserById(Long id) {
         User user = getUserOrThrow(id);
         UserOutputDto foundUser = userMapper.toDto(user);
+        if (user.getCompanyId() != null) {
+            CompanyDto companyDto = companyClient.getCompanyById(user.getCompanyId());
+            foundUser.setCompanyDto(companyDto);
+        }
         log.debug("User with id = {} has been found.", user.getId());
         return foundUser;
     }
