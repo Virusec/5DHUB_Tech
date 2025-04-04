@@ -6,3 +6,10 @@ databaseChangeLog:
         - sqlFile:
             path: changelog/changes/V001_create-users-table.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 2
+      author: ashikin
+      changes:
+          - sqlFile:
+              path: changelog/changes/V002_add-company-id-to-users.sql
+              relativeToChangelogFile: true

@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * @author Anatoliy Shikin
  */
@@ -56,8 +58,25 @@ public class UserServiceImpl implements UserService {
     public UserOutputDto getUserById(Long id) {
         User user = getUserOrThrow(id);
         UserOutputDto foundUser = userMapper.toDto(user);
+
+//TODO write exception
+//        if (user.getCompanyId() != null) {
+//            CompanyDto companyDto = companyClient.getCompanyById(user.getCompanyId());
+//            foundUser.setCompanyDto(companyDto);
+//        }
+
         log.debug("User with id = {} has been found.", user.getId());
         return foundUser;
+    }
+
+    @Override
+    public List<UserOutputDto> getUsersByCompanyId(Long id) {
+        List<User> usersPage = userRepository.findByCompanyId(id);
+        if (usersPage.isEmpty()) {
+            throw new EntityNotFoundException("Users with company id = " + id + " was not found!");
+        }
+        log.debug("Company with id = {} has been found.", id);
+        return userMapper.toListDto(usersPage);
     }
 
     @Override

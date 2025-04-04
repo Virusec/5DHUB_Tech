@@ -7,12 +7,16 @@ import org.example.model.dto.CompanyOutputDto;
 import org.example.exception.EntityNotFoundException;
 import org.example.mapper.CompanyMapper;
 import org.example.model.domain.Company;
+import org.example.model.dto.UserDto;
 import org.example.repository.CompanyRepository;
 import org.example.service.CompanyService;
+import org.example.service.UserClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author Anatoliy Shikin
@@ -24,6 +28,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyMapper companyMapper;
     private final CompanyRepository companyRepository;
+    private final UserClient userClient;
 
     @Transactional
     @Override
@@ -56,18 +61,16 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public CompanyOutputDto getCompanyById(Long id) {
         Company company = getCompanyOrThrow(id);
-        CompanyOutputDto foundCompany = companyMapper.toDto(company);
         log.debug("Company with id = {} has been found.", company.getId());
-        return foundCompany;
+        return getCompanyUsers(company);
     }
 
     @Override
     public CompanyOutputDto getCompanyByName(String name) {
         Company company = companyRepository.findByNameIgnoreCase(name)
                 .orElseThrow(() -> new EntityNotFoundException("Company with name " + name + " was not found!"));
-        CompanyOutputDto foundCompanyByName = companyMapper.toDto(company);
         log.debug("Company with name = {} has been found.", name);
-        return foundCompanyByName;
+        return getCompanyUsers(company);
     }
 
     @Override
@@ -84,5 +87,22 @@ public class CompanyServiceImpl implements CompanyService {
     private Company getCompanyOrThrow(Long id) {
         return companyRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Company with id " + id + " was not found!"));
+    }
+
+    private CompanyOutputDto getCompanyUsers(Company company) {
+        List<UserDto> users = userClient.getUsersByCompanyId(company.getId());
+        CompanyOutputDto companyOutputDto = companyMapper.toDto(company);
+
+//                CompanyOutputDto foundCompany = companyMapper.toDto(company);
+//        if (company.getEmployeeIds() != null && !company.getEmployeeIds().isEmpty()) {
+//            List<UserDto> users = userClient.getUsersByCompanyId(company.getId());
+//            foundCompany.setEmployees(users);
+//        } else {
+//            foundCompany.setEmployees(Collections.emptyList());
+//        }
+//        companyOutputDto.setEmployeesId(company.getEmployeeIds());
+
+        companyOutputDto.setEmployees(users);
+        return companyOutputDto;
     }
 }

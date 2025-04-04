@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author Anatoliy Shikin
  */
@@ -13,4 +15,6 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Page<User> findByLastNameIgnoreCase(Pageable pageable, String lastName);
+
+    List<User> findByCompanyId(Long id);
 }

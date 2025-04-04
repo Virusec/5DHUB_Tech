@@ -31,4 +31,6 @@ public class User {
     private String lastName;
     @Column(name = "phone_number")
     private String phoneNumber;
+    @Column(name = "company_id")
+    private Long companyId;
 }

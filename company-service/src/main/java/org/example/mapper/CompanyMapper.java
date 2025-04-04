@@ -14,12 +14,13 @@ import java.util.List;
  */
 @Mapper(componentModel = "spring")
 public interface CompanyMapper {
-
+    @Mapping(target = "employees", ignore = true)
     CompanyOutputDto toDto(Company company);
 
     @Mapping(target = "id", ignore = true)
     Company toEntity(CompanyInputDto companyDto);
 
+    @Mapping(target = "employees", ignore = true)
     List<CompanyOutputDto> toListDto(List<Company> companies);
 
     @Mapping(target = "id", ignore = true)
