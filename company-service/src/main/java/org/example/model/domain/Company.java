@@ -35,8 +35,8 @@ public class Company {
     @Column(name = "budget")
     private Double budget;
 
-    @ElementCollection
-    @Column(name = "employee_id")
-    @CollectionTable(name = "company_employees", joinColumns = @JoinColumn(name = "company_id"))
-    private List<Long> employeeIds;
+//    @ElementCollection
+//    @Column(name = "employee_id")
+//    @CollectionTable(name = "company_employees", joinColumns = @JoinColumn(name = "company_id"))
+//    private List<Long> employeeIds;
 }

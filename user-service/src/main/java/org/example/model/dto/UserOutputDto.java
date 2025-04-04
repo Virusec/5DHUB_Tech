@@ -15,5 +15,5 @@ public class UserOutputDto {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    private CompanyDto companyDto;
+    private Long companyId;
 }

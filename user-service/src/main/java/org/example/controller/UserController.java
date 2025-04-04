@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * @author Anatoliy Shikin
  */
@@ -62,10 +64,17 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+    @GetMapping("company_id/{id}")
+    public List<UserOutputDto> getUsersByCompanyId(@PathVariable Long id) {
+        log.info("The method was invoked to find users by company id = {}.", id);
+        return userService.getUsersByCompanyId(id);
+    }
+
     @GetMapping("search")
     public Page<UserOutputDto> getUsersByLastName(
             @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
-            @RequestParam String lastName) {
+            @RequestParam String lastName
+    ) {
         log.info("The method was invoked to find users by last name = {}.", lastName);
         return userService.getUsersByLastName(pageable, lastName);
     }

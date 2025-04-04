@@ -2,8 +2,8 @@ package org.example.service;
 
 import org.example.model.dto.UserDto;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -12,6 +12,6 @@ import java.util.List;
  */
 @FeignClient(name = "user-service", url = "${user.service.url}")
 public interface UserClient {
-    @PostMapping("users/batch")
-    List<UserDto> getUsersByIds(@RequestBody List<Long> ids);
+    @GetMapping("users/company_id/{id}")
+    List<UserDto> getUsersByCompanyId(@PathVariable("id") Long id);
 }

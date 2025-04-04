@@ -5,6 +5,8 @@ import org.example.model.dto.UserOutputDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 /**
  * @author Anatoliy Shikin
  */
@@ -17,6 +19,8 @@ public interface UserService {
     void delete(Long id);
 
     UserOutputDto getUserById(Long id);
+
+    List<UserOutputDto> getUsersByCompanyId(Long id);
 
     Page<UserOutputDto> getUsersByLastName(Pageable pageable, String lastName);
 

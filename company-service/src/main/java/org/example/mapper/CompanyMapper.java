@@ -18,12 +18,11 @@ public interface CompanyMapper {
     CompanyOutputDto toDto(Company company);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "employeeIds", ignore = true)
     Company toEntity(CompanyInputDto companyDto);
 
+    @Mapping(target = "employees", ignore = true)
     List<CompanyOutputDto> toListDto(List<Company> companies);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "employeeIds", ignore = true)
     void updateCompanyFromDto(CompanyInputDto companyInputDto, @MappingTarget Company company);
 }
