@@ -93,6 +93,7 @@ public class CompanyServiceImpl implements CompanyService {
         List<UserDto> users = userClient.getUsersByCompanyId(company.getId());
         CompanyOutputDto companyOutputDto = companyMapper.toDto(company);
 
+//TODO write exception
 //                CompanyOutputDto foundCompany = companyMapper.toDto(company);
 //        if (company.getEmployeeIds() != null && !company.getEmployeeIds().isEmpty()) {
 //            List<UserDto> users = userClient.getUsersByCompanyId(company.getId());
